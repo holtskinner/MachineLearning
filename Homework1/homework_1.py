@@ -45,9 +45,17 @@ def covariance(m):
 
     return (cov_matrix, mean_vector)
 
+
 def eigenvalues_eigenvectors(m):
 
-    return 0
+    b = -(m[0][0] + m[1][1])
+    c = (m[0][0] * m[1][1]) - (m[0][1] * m[1][0])
+    descriminant = np.sqrt(np.square(b) - (4 * c))
+
+    eigenvalues = [-(b + descriminant) / 2, -(b - descriminant) / 2]
+
+    return eigenvalues, 0
+
 
 def main():
 
@@ -81,8 +89,14 @@ def main():
         print(f"Built-In {numpy_mean_y}\n")
 
         print("Eigenvalues & Eigenvectors")
-        eigenvalues, eigenvectors = np.linalg.eig(calculated_cov)
+        n_eigenvalues, n_eigenvectors = np.linalg.eig(calculated_cov)
+
+        eigenvalues, eigenvectors = eigenvalues_eigenvectors(calculated_cov)
+
+        print(n_eigenvalues)
         print(eigenvalues)
-        print(eigenvectors)
+        # print(n_eigenvectors)
+        # print(eigenvectors)
+
 
 main()
