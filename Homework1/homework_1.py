@@ -117,9 +117,12 @@ def main():
             label=f"Class {index}",
             alpha=0.5,
             edgecolors="none")
+        ax.quiver(mean_vector[0], mean_vector[1], eigenvectors[0],
+                  eigenvectors[1])
 
     ax.legend()
     ax.grid(True)
     plt.show()
+
 
 main()
