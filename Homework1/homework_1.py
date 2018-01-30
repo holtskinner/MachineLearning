@@ -75,6 +75,9 @@ def main():
     # DATA is a list of Matrices (3D Matrix!)
     data = sp.loadmat("./data_class4.mat")["Data"][0]
 
+    fig, ax = plt.subplots()
+    colors = ["#cc79a7", "#0072b2", "#d55e00", "#009e73"]
+
     # matrix Because class is a reserved word
     for index, matrix in enumerate(data):
 
@@ -106,15 +109,17 @@ def main():
         print(f"Eigenvalues: {eigenvalues}\n")
         print(f"Eigenvectors: {eigenvectors}\n")
 
-    N = 50
+        ax.scatter(
+            matrix[0],
+            matrix[1],
+            c=colors[index],
+            s=50,
+            label=f"Class {index}",
+            alpha=0.5,
+            edgecolors="none")
 
-    x = np.random.rand(N)
-    y = np.random.rand(N)
-    colors = np.random.rand(N)
-    area = np.pi * (15 * np.random.rand(N))**2  # 0 to 15 point radii
-
-    plt.scatter(x, y, s=area, c=colors, alpha=0.5)
+    ax.legend()
+    ax.grid(True)
     plt.show()
-
 
 main()
