@@ -48,14 +48,25 @@ def covariance(m):
 
 def eigenvalues_eigenvectors(m):
 
+    # Eigenvalues (Using Quadratic Formula)
+
     b = -(m[0][0] + m[1][1])
     c = (m[0][0] * m[1][1]) - (m[0][1] * m[1][0])
     descriminant = np.sqrt(np.square(b) - (4 * c))
 
     eigenvalues = [-(b + descriminant) / 2, -(b - descriminant) / 2]
 
-    return eigenvalues, 0
+    # Eigenvectors
+    # Set phi(1,1) = 1
 
+    eigenvectors = []
+
+    for e in eigenvalues:
+        phi = (e - m[0][0]) / m[0][1]
+        scalar = np.sqrt(1 + np.square(phi))
+        eigenvectors.append([1 / scalar, phi / scalar])
+
+    return eigenvalues, eigenvectors
 
 def main():
 
@@ -74,13 +85,13 @@ def main():
         print(f"Class {index}:")
         print("---------------\n")
 
-        print("Covaraiance")
+        print("Covaraiance\n")
         print("By Hand:")
         print(calculated_cov)
         print("Built-In:")
         print(numpy_cov)
 
-        print("\nMean")
+        print("\nMean\n")
         print("X")
         print(f"By Hand: {mean_vector[0]}")
         print(f"Built-In {numpy_mean_x}")
@@ -88,15 +99,9 @@ def main():
         print(f"By Hand: {mean_vector[1]}")
         print(f"Built-In {numpy_mean_y}\n")
 
-        print("Eigenvalues & Eigenvectors")
-        n_eigenvalues, n_eigenvectors = np.linalg.eig(calculated_cov)
-
         eigenvalues, eigenvectors = eigenvalues_eigenvectors(calculated_cov)
 
-        print(n_eigenvalues)
-        print(eigenvalues)
-        # print(n_eigenvectors)
-        # print(eigenvectors)
-
+        print(f"Eigenvalues: {eigenvalues}\n")
+        print(f"Eigenvectors: {eigenvectors}\n")
 
 main()
