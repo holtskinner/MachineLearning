@@ -1,6 +1,8 @@
 import scipy.io as sp
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")
+from matplotlib import pyplot as plt
 
 
 def mean(matrix):
@@ -117,12 +119,24 @@ def main():
             label=f"Class {index}",
             alpha=0.5,
             edgecolors="none")
-        ax.quiver(mean_vector[0], mean_vector[1], eigenvectors[0],
-                  eigenvectors[1])
+
+        ax.arrow(
+            mean_vector[0],
+            mean_vector[1],
+            eigenvectors[0][0],
+            eigenvectors[0][1],
+            width=0.2)
+
+        ax.arrow(
+            mean_vector[0],
+            mean_vector[1],
+            eigenvectors[1][0],
+            eigenvectors[1][1],
+            width=0.2)
 
     ax.legend()
     ax.grid(True)
-    plt.show()
+    plt.savefig("homework1-plot")
 
 
 main()
