@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.io.matlab import loadmat
 from scipy.spatial.distance import mahalanobis as mh
 
@@ -37,7 +38,20 @@ def discriminant(x, mean, covariance, dimension, prior):
     return -a - b - c + d
 
 
-def main():
+def whiten(y, cov_matrix):
+
+    eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+
+    # Big Lambda inverse square root
+    D = np.diag(1 / np.sqrt(eigenvalues))
+
+    # Whitening Matrix
+    W = np.dot(np.dot(eigenvectors, D), eigenvectors.T)
+
+    return
+
+
+def part1():
 
     data = np.array(loadmat("./data_class3.mat")["Data"][0])
 
@@ -45,15 +59,52 @@ def main():
     test_points = np.array([[1, 3, 2], [4, 6, 1], [7, -1, 0], [-2, 6, 5]])
 
     dimensions = data.size
-    mean_vectors = np.array([])
-    cov_matrices = np.array([])
+    mean_vectors = []
+    cov_matrices = []
 
     # Each class of the data
     for c in data:
-        np.append(mean_vectors, np.mean(c, axis=1))
-        np.append(cov_matrices, np.cov(c))
+        mean_vectors.append(np.mean(c, axis=1))
+        cov_matrices.append(np.cov(c))
 
-    return 0
+    for point in test_points:
+
+        print(f"\nPoint: {point}")
+
+        for i in range(dimensions):
+
+            m = discriminant(point, mean_vectors[i], cov_matrices[i],
+                             dimensions, priors[i])
+            print(f"Class {i}: {m}")
+
+    # TODO Figure out correct way to classify points
+
+    return
 
 
-main()
+def part2():
+
+    # Part a, b, c
+    mean_vectors = np.array([[8, 2], [2, 8]])
+    cov_matrix = np.array([[4.1, 0], [0, 2.8]])
+
+    y = np.random.standard_normal(1000)
+
+    whiten(y, cov_matrix)
+
+    # x = np.random.multivariate_normal(mean_vectors[1], cov_matrix, 1000).T
+    # print(x)
+
+    # Part d
+    cov_matrix[0, 1] = 0.4
+    cov_matrix[1, 0] = 0.4
+
+    # Part e
+    cov_matrix1 = np.array([[2.1, 1.5], [1.5, 3.8]])
+    cov_matrix2 = cov_matrix
+
+    return
+
+
+part1()
+part2()
