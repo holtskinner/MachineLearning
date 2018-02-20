@@ -53,6 +53,38 @@ def whiten(y, cov_matrix):
     return W
 
 
+def coloring_transformation(y, mean, cov_matrix):
+
+    eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+
+    # Big Lambda square root matrix
+    lamb = np.diag(np.sqrt(eigenvalues))
+
+    # Coloring Matrix
+    c = np.dot(lamb, y)
+
+    # Turn uncorrelated data into correlated data
+    x = np.dot(eigenvectors, c)
+
+    # Add mean vector to each column
+    for i in range(len(x[0])):
+        x[0][i] += mean[0]
+        x[1][i] += mean[1]
+
+    return x
+
+
+def generate_data(number_of_samples, mean, cov_matrix):
+
+    y = []
+
+    for i in range(len(mean)):
+        # Uncorrelated data
+        y.append(np.random.standard_normal(number_of_samples))
+
+    return coloring_transformation(y, mean, cov_matrix)
+
+
 def part1():
 
     data = np.array(loadmat("./data_class3.mat")["Data"][0])
@@ -73,24 +105,60 @@ def part1():
 
         print(f"\nPoint: {point}")
 
+        discriminants = []
+
         for i in range(dimensions):
 
             m = discriminant(point, mean_vectors[i], cov_matrices[i],
                              dimensions, priors[i])
-            print(f"Class {i}: {m}")
+            discriminants.append(m)
 
-    # TODO Figure out correct way to classify points
+        a_max = np.argmax(discriminants)
+        print(f"Class {a_max} Discriminant: {discriminants[a_max]}")
 
     return
+
+
+def plot_classes(class1, class2):
+
+    fig, ax = plt.subplots()
+
+    ax.scatter(
+        class1[0],
+        class1[1],
+        c="#cc79a7",
+        label=f"Class {0}",
+        alpha=0.5,
+        edgecolors="none")
+
+    ax.scatter(
+        class2[0],
+        class2[1],
+        c="#0072b2",
+        label=f"Class {1}",
+        alpha=0.5,
+        edgecolors="none")
+
+    ax.legend()
+    ax.grid(True)
+    plt.savefig("homework2-plot")
+
+    # 3D Plot
+
+    # xy = np.column_stack([X.flat, Y.flat])
+
+    # z = mn.pdf(xy, mean=u1, cov=cov1)
+    # Z = z.reshape(X.shape)
+
+    # fig = plt.figure()
+    # ax = fig.add_subplot(111, projection='3d')
+    # ax.plot_surface(X, Y, Z, linewidth=0, antialiased=True)
+    # plt.show()
 
 
 def part2():
 
     # Part a, b, c
-    # mean_vectors = np.array([[8, 2], [2, 8]])
-    # cov_matrix = np.array([[4.1, 0], [0, 2.8]])
-
-    # y = np.random.standard_normal(1000)
 
     u1 = [8, 2]
     u2 = [2, 8]
@@ -98,19 +166,14 @@ def part2():
     cov2 = cov1
     prior1 = .8
 
-    data_points = np.random.multivariate_normal(u1, cov1, 50).T
-    # print(xy)
+    number_of_samples = 1000
 
-    X, Y = np.meshgrid(data_points[0], data_points[1])
-    xy = np.column_stack([X.flat, Y.flat])
+    # correlated data
+    class1 = generate_data(number_of_samples, u1, cov1)
 
-    z = mn.pdf(xy, mean=u1, cov=cov1)
-    Z = z.reshape(X.shape)
+    class2 = generate_data(number_of_samples, u2, cov2)
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(X, Y, Z, linewidth=0, antialiased=True)
-    plt.show()
+    plot_classes(class1, class2)
 
     # print(x)
 
