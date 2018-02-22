@@ -2,7 +2,6 @@ import numpy as np
 from scipy.stats import multivariate_normal as mn
 import matplotlib.pyplot as plt
 from scipy.io.matlab import loadmat
-from scipy.spatial.distance import mahalanobis as mh
 from mpl_toolkits.mplot3d import Axes3D
 
 
@@ -40,19 +39,6 @@ def discriminant(x, mean, covariance, dimension, prior):
     return -a - b - c + d
 
 
-def whiten(y, cov_matrix):
-
-    eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
-
-    # Big Lambda inverse square root
-    D = np.diag(1 / np.sqrt(eigenvalues))
-
-    # Whitening Matrix
-    W = np.dot(np.dot(eigenvectors, D), eigenvectors.T)
-
-    return W
-
-
 def coloring_transformation(y, mean, cov_matrix):
 
     eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
@@ -83,6 +69,53 @@ def generate_data(number_of_samples, mean, cov_matrix):
         y.append(np.random.standard_normal(number_of_samples))
 
     return coloring_transformation(y, mean, cov_matrix)
+
+
+def plot_classes(class1, class2, i):
+
+    fig, ax = plt.subplots()
+
+    ax.scatter(
+        class1[0],
+        class1[1],
+        c="#cc79a7",
+        label=f"Class {0}",
+        alpha=0.5,
+        edgecolors="none")
+
+    ax.scatter(
+        class2[0],
+        class2[1],
+        c="#0072b2",
+        label=f"Class {1}",
+        alpha=0.5,
+        edgecolors="none")
+
+    ax.legend()
+    ax.grid(True)
+    plt.savefig(f"homework2-plot {i}")
+
+
+def plot_3d(class1, u1, cov1, i):
+
+    X, Y = np.meshgrid(class1[0], class1[1])
+    xy = np.column_stack([X.flat, Y.flat])
+
+    z = mn.pdf(xy, mean=u1, cov=cov1)
+    Z = z.reshape(X.shape)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.plot_surface(X, Y, Z, linewidth=0, antialiased=True)
+    plt.savefig(f"homework2-3d-plot {i}")
+
+
+def graph_gaussian(number_of_samples, u1, u2, cov1, cov2, i):
+    # correlated data
+    class1 = generate_data(number_of_samples, u1, cov1)
+    class2 = generate_data(number_of_samples, u2, cov2)
+    plot_classes(class1, class2, i)
+    plot_3d(class1, u1, cov1, i)
 
 
 def part1():
@@ -119,71 +152,30 @@ def part1():
     return
 
 
-def plot_classes(class1, class2):
-
-    fig, ax = plt.subplots()
-
-    ax.scatter(
-        class1[0],
-        class1[1],
-        c="#cc79a7",
-        label=f"Class {0}",
-        alpha=0.5,
-        edgecolors="none")
-
-    ax.scatter(
-        class2[0],
-        class2[1],
-        c="#0072b2",
-        label=f"Class {1}",
-        alpha=0.5,
-        edgecolors="none")
-
-    ax.legend()
-    ax.grid(True)
-    plt.savefig("homework2-plot")
-
-    # 3D Plot
-
-    # xy = np.column_stack([X.flat, Y.flat])
-
-    # z = mn.pdf(xy, mean=u1, cov=cov1)
-    # Z = z.reshape(X.shape)
-
-    # fig = plt.figure()
-    # ax = fig.add_subplot(111, projection='3d')
-    # ax.plot_surface(X, Y, Z, linewidth=0, antialiased=True)
-    # plt.show()
-
-
 def part2():
 
     # Part a, b, c
 
     u1 = [8, 2]
     u2 = [2, 8]
-    cov1 = [[4.1, 0], [0, 2.8]]
-    cov2 = cov1
+    cov1 = cov2 = np.array([[4.1, 0], [0, 2.8]])
     prior1 = .8
 
     number_of_samples = 1000
 
-    # correlated data
-    class1 = generate_data(number_of_samples, u1, cov1)
-
-    class2 = generate_data(number_of_samples, u2, cov2)
-
-    plot_classes(class1, class2)
-
-    # print(x)
+    graph_gaussian(number_of_samples, u1, u2, cov1, cov2, 0)
 
     # Part d
-    # cov_matrix[0, 1] = 0.4
-    # cov_matrix[1, 0] = 0.4
+    cov1[0, 1] = 0.4
+    cov1[1, 0] = 0.4
+    # cov2 == cov1
 
-    # # Part e
-    # cov_matrix1 = np.array([[2.1, 1.5], [1.5, 3.8]])
-    # cov_matrix2 = cov_matrix
+    graph_gaussian(number_of_samples, u1, u2, cov1, cov2, 1)
+
+    # Part e
+    cov1 = np.array([[2.1, 1.5], [1.5, 3.8]])
+
+    graph_gaussian(number_of_samples, u1, u2, cov1, cov2, 2)
 
     return
 
