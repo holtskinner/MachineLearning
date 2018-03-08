@@ -23,6 +23,8 @@ def bbn(prob_of: dict, given: dict):
         d = given["d"]
         probability *= d_x[x, d]
 
+        probability /= .5
+
     elif key == "a":
 
         a = prob_of["a"]
@@ -36,6 +38,8 @@ def bbn(prob_of: dict, given: dict):
         d = given["d"]
         probability *= d_x[0, d] + d_x[1, d]
 
+        probability /= (.5 * .5 * .33 * .5)
+
     elif key == "b":
 
         b = prob_of["b"]
@@ -48,6 +52,8 @@ def bbn(prob_of: dict, given: dict):
 
         d = given["d"]
         probability *= d_x[0, d] + d_x[1, d]
+
+        probability /= (.25 * .5 * .33 * .5)
 
     return probability
 
