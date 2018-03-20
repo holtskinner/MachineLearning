@@ -9,6 +9,10 @@ def max_likelihood(x, n):
     return mu, sigma
 
 
+num_features = 3
+num_classes = 3
+num_samples = 10
+
 # Dimensions (Num Samples X num classes X num features)
 data = np.array([
     # Sample 1
@@ -71,7 +75,12 @@ data = np.array([
     ]
 ])
 
-x = np.array([])
-n = len(x)
+data_by_features = data.T
 
-max_likelihood(x, n)
+data_by_class = np.zeros((num_classes, num_features, num_samples))
+
+for i in range(num_classes):
+    for j in range(num_features):
+        data_by_class[i, j] = data_by_features[j, i]
+
+print(data_by_class)
