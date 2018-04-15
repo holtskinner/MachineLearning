@@ -24,7 +24,7 @@ def max_likelihood(x, n):
 
     for k in range(n):
         d = x[k] - mu
-        sigma += d * d.T
+        sigma += d * np.transpose(d)
 
     sigma /= (n)
 
@@ -66,3 +66,5 @@ def main():
     print("Part D\n")
     mu, sigma = max_likelihood(data_by_class[1], num_samples)
     print_mu_sigma(mu, sigma)
+
+main()
