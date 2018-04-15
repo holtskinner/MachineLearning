@@ -1,22 +1,11 @@
 import numpy as np
 
-def max_likelihood(x, n):
 
-    x = x.T
-    mu = 0
+def mle(x):
 
-    for k in range(n):
-        mu += x[k]
-
-    mu /= n
-
-    sigma = 0
-
-    for k in range(n):
-        d = x[k] - mu
-        sigma += d * np.transpose(d)
-
-    sigma /= (n)
+    n = x.shape[0]
+    mu = np.sum(x, axis=0) / n
+    sigma = np.subtract(x, mu)
+    sigma = np.dot(sigma, np.transpose(sigma)) / n
 
     return mu, sigma
-
