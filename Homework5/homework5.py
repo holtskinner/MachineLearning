@@ -3,31 +3,30 @@ from scipy.io.matlab import loadmat
 from max_likelihood import mle
 
 
-def load_data():
+def load():
 
-    train_data, test_data = loadmat(
-        "./test_train_data_class3.mat")["Data"][0][0]
+    train, test = loadmat(
+        "./test_train_class3.mat")["Data"][0][0]
 
-    train_data = np.array(train_data[0])
-    test_data = np.array(test_data[0])
+    train = np.array(train[0])
+    test = np.array(test[0])
 
-    for i in range(train_data.shape[0]):
-        train_data[i] = np.transpose(train_data[i])
+    for i in range(train.shape[0]):
+        train[i] = np.transpose(train[i])
 
-    for i in range(test_data.shape[0]):
-        test_data[i] = np.transpose(test_data[i])
+    for i in range(test.shape[0]):
+        test[i] = np.transpose(test[i])
 
-    return train_data, test_data
+    return train, test
 
 
 def main():
 
-    train_data, test_data = load_data()
+    train, test = load()
 
-    # For each class
-    for c in train_data:
-
-        mean, covariance = mle(c)
+    # Part a
+    for c in train:
+        mean, cov = mle(c)
 
 
 if __name__ == "__main__":
