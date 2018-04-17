@@ -2,6 +2,7 @@ import numpy as np
 from scipy.io.matlab import loadmat
 from mahalanobis import discriminant
 from confusion_matrix import confusion_matrix
+from coordinates import cart2pol, pol2cart
 
 
 def load_data():
