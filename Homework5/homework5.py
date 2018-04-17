@@ -20,6 +20,21 @@ def load_data():
     return train, test
 
 
+def flatten_data(data, c):
+    actual = np.array([], dtype=int)
+    flat = np.zeros(2)
+
+    # Flatten Test Array
+    for i in range(c):
+        for j in range(data[i].shape[0]):
+            actual = np.append(actual, i)
+            flat = np.vstack([flat, data[i][j]])
+
+    flat = flat[1:101]
+
+    return flat, actual
+
+
 def main():
 
     train, test = load_data()
@@ -39,18 +54,10 @@ def main():
         means[i] = np.mean(train[i], axis=0)
         covs[i] = np.cov(train[i], rowvar=0)
 
-    actual = np.array([], dtype=int)
     predicted = np.array([], dtype=int)
 
-    flat_test = np.zeros(2)
+    flat_test, actual = flatten_data(test, c)
 
-    # Flatten Test Array
-    for i in range(c):
-        for j in range(test[i].shape[0]):
-            actual = np.append(actual, i)
-            flat_test = np.vstack([flat_test, test[i][j]])
-
-    flat_test = flat_test[1:101]
     disc_values = np.zeros((100, 3))
 
     ####### Part B ######
@@ -66,6 +73,12 @@ def main():
 
     print(cm)
     print(f"Error = {1 - acc}")
+
+    ####### Part D ##########
+
+    flat_train, _ = flatten_data(train, c)
+
+    polar = cart2pol()
 
 
 if __name__ == "__main__":
