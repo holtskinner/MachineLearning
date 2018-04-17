@@ -37,15 +37,15 @@ def main():
         means[i] = np.mean(train[i], axis=0)
         covs[i] = np.cov(train[i], rowvar=0)
 
-    expected = np.array([], dtype=int)
     actual = np.array([], dtype=int)
+    predicted = np.array([], dtype=int)
 
     flat_test = np.zeros(2)
 
     # Flatten Test Array
     for i in range(c):
         for j in range(test[i].shape[0]):
-            expected = np.append(expected, i)
+            actual = np.append(actual, i)
             flat_test = np.vstack([flat_test, test[i][j]])
 
     flat_test = flat_test[1:101]
@@ -56,10 +56,13 @@ def main():
             m = discriminant(point, means[j], covs[j], d, prior)
             disc_values[i, j] = m
 
-    actual = np.argmax(disc_values, axis=1)
+    predicted = np.argmax(disc_values, axis=1)
 
-    print(expected)
     print(actual)
+    print(predicted)
+
+    conf = confusion_matrix(actual, predicted)
+    print(conf)
 
 
 if __name__ == "__main__":
