@@ -58,12 +58,10 @@ def main():
 
     predicted = np.argmax(disc_values, axis=1)
 
-    print(actual)
-    print(predicted)
-
     cm, acc = confusion_matrix(actual, predicted, c)
+
     print(cm)
-    print(acc)
+    print(f"Error = {1 - acc}")
 
 
 if __name__ == "__main__":
