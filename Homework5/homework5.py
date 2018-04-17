@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.io.matlab import loadmat
 from mahalanobis import discriminant
-from sklearn.metrics import confusion_matrix
+from confusion_matrix import confusion_matrix
 
 
 def load_data():
@@ -61,8 +61,9 @@ def main():
     print(actual)
     print(predicted)
 
-    conf = confusion_matrix(actual, predicted)
-    print(conf)
+    cm, acc = confusion_matrix(actual, predicted, c)
+    print(cm)
+    print(acc)
 
 
 if __name__ == "__main__":
