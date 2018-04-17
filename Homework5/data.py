@@ -27,6 +27,6 @@ def flatten_data(data, c):
             actual = np.append(actual, i)
             flat = np.vstack([flat, data[i][j]])
 
-    flat = flat[1:101]
+    flat = flat[1:len(flat) + 1]
 
     return flat, actual

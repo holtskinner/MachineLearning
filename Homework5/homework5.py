@@ -3,6 +3,7 @@ from data import load_data, flatten_data
 from mahalanobis import discriminant
 from confusion_matrix import confusion_matrix
 from coordinates import cart2pol, pol2cart
+from plot import plot_data
 
 
 def main():
@@ -49,11 +50,14 @@ def main():
 
     ####### Part D ##########
 
-    flat_train, _ = flatten_data(train, c)
+    flat_train, labels_train = flatten_data(train, c)
+    labels_test = actual
 
     r_train, theta_train = cart2pol(flat_train)
 
     r_test, theta_test = cart2pol(flat_test)
+    plot_data(r_train, theta_train, labels_train, c)
+    plot_data(r_test, theta_test, labels_test, c)
 
 
 if __name__ == "__main__":

@@ -1,9 +1,15 @@
-from numpy import exp, abs, angle
+import numpy as np
 
 
-def pol2cart(r, theta):
-    return r * exp(1j * theta)
+def cart2pol(data):
+    x = data.T[0]
+    y = data.T[1]
+    rho = np.sqrt(x**2 + y**2)
+    phi = np.arctan2(y, x)
+    return(rho, phi)
 
 
-def cart2pol(z):
-    return (abs(z), angle(z))
+def pol2cart(rho, phi):
+    x = rho * np.cos(phi)
+    y = rho * np.sin(phi)
+    return(x, y)
