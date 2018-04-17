@@ -33,6 +33,7 @@ def main():
     means = np.empty((c, d))
     covs = np.empty(((c, d, d)))
 
+    ###### Part A #######
     for i in range(c):
         means[i] = np.mean(train[i], axis=0)
         covs[i] = np.cov(train[i], rowvar=0)
@@ -51,6 +52,7 @@ def main():
     flat_test = flat_test[1:101]
     disc_values = np.zeros((100, 3))
 
+    ####### Part B ######
     for i, point in enumerate(flat_test):
         for j in range(c):
             m = discriminant(point, means[j], covs[j], d, prior)
@@ -58,6 +60,7 @@ def main():
 
     predicted = np.argmax(disc_values, axis=1)
 
+    ####### Part C #########
     cm, acc = confusion_matrix(actual, predicted, c)
 
     print(cm)
