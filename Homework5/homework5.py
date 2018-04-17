@@ -28,7 +28,7 @@ def main():
 
     predicted = np.array([], dtype=int)
 
-    flat_test, actual = flatten_data(test, c)
+    flat_test, labels_test = flatten_data(test, c)
 
     disc_values = np.zeros((100, 3))
 
@@ -43,7 +43,7 @@ def main():
 
     ####### Part C #########
 
-    cm, acc = confusion_matrix(actual, predicted, c)
+    cm, acc = confusion_matrix(labels_test, predicted, c)
 
     print(cm)
     print(f"Error = {1 - acc}")
@@ -51,11 +51,11 @@ def main():
     ####### Part D ##########
 
     flat_train, labels_train = flatten_data(train, c)
-    labels_test = actual
 
-    r_train, theta_train = cart2pol(flat_train)
+    r_train, theta_train, polar_train = cart2pol(flat_train)
 
-    r_test, theta_test = cart2pol(flat_test)
+    r_test, theta_test, polar_test = cart2pol(flat_test)
+
     plot_data(r_train, theta_train, labels_train, c)
     plot_data(r_test, theta_test, labels_test, c)
 
