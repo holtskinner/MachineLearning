@@ -18,6 +18,7 @@ def load_data():
 
 
 def flatten_data(data, c):
+    # Because MATLAB...
     actual = np.array([], dtype=int)
     flat = np.zeros(2)
 
