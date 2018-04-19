@@ -9,7 +9,13 @@ def mah(x1, x2, cov):
 
     # Vector-Matrix Multiplication
     # first pair (numpy only allows two at a time)
-    dist = np.dot(diff, np.linalg.inv(cov))
+
+    if np.isscalar(cov):
+        inv = 1 / cov
+    else:
+        inv = np.linalg.inv(cov)
+
+    dist = np.dot(diff, inv)
 
     dist = np.dot(dist, diff)
 
@@ -26,7 +32,11 @@ def discriminant(x, mean, covariance, dimension, prior):
     # np.log is natural log
     b = (dimension / 2) * np.log(2 * np.pi)
 
-    c = (1 / 2) * np.log(np.linalg.det(covariance))
+    if np.isscalar(covariance):
+        det = covariance
+    else:
+        det = np.linalg.det(covariance)
+    c = (1 / 2) * np.log(det)
 
     d = np.log(prior)
 

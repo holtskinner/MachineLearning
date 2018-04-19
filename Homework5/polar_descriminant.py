@@ -12,4 +12,9 @@ def mu_estimate(data, mu_0, sigma_0, variance):
 
     mu_n = (a * mu_hat) + (b * mu_0)
 
-    return mu_n
+    num = sigma_0 * variance
+    den = n * sigma_0 + variance
+
+    sigma_n = num / den
+
+    return mu_n, sigma_n
